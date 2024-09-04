@@ -27,9 +27,10 @@ const addFoodItem =  async(req,res)=>{
 
 const listFood = async(req,res)=>{
     try{
-        const foods = Food.find({});
-        console.log(foods);
-        // res.json({success:true, message:foods});
+        const foods = await Food.find({});
+        // console.log(foods);
+        const object= {success:true, message:foods};
+        res.json(object);
     }
     catch(err)
     {
