@@ -6,9 +6,13 @@ import Add from './pages/add/add';
 import List from './pages/list/list';
 import Order from './pages/order/order';
 
+  import { ToastContainer} from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
+
 const App = ()=>{
   return(
     <>
+    <ToastContainer/>
     <Navbar/>
     <hr />
     <div className="app-content">
