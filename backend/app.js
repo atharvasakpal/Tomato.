@@ -3,7 +3,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const foodRouter  = require('./routes/foodRoute');
 const UserRouter = require('./routes/userRoute');
-
+const cartRoute = require('./routes/cartRoute');
 
 
 if(process.env.NODE_ENV !== "production")
@@ -34,6 +34,7 @@ app.use(cors());
 app.use('/api/food',foodRouter);
 app.use('/images',express.static('uploads'));
 app.use('/user',UserRouter)
+app.use('/api/cart',cartRoute)
 
 
 app.get('/',(req,res)=>{
