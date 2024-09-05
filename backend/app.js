@@ -2,6 +2,14 @@ const express  = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const foodRouter  = require('./routes/foodRoute');
+const UserRouter = require('./routes/userRoute');
+
+
+
+if(process.env.NODE_ENV !== "production")
+{
+	require('dotenv').config();
+}
 
 //app config
 const app = express();
@@ -25,6 +33,7 @@ app.use(cors());
 //creating api endpoints
 app.use('/api/food',foodRouter);
 app.use('/images',express.static('uploads'));
+app.use('/user',UserRouter)
 
 
 app.get('/',(req,res)=>{
