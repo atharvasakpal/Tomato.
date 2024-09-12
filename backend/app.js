@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const foodRouter  = require('./routes/foodRoute');
 const UserRouter = require('./routes/userRoute');
 const cartRoute = require('./routes/cartRoute');
-
+const orderRouter = require('./routes/orderRoute');
 
 if(process.env.NODE_ENV !== "production")
 {
@@ -35,7 +35,7 @@ app.use('/api/food',foodRouter);
 app.use('/images',express.static('uploads'));
 app.use('/user',UserRouter)
 app.use('/api/cart',cartRoute)
-
+app.use('/api/order',orderRouter); 
 
 app.get('/',(req,res)=>{
     res.send('API working');

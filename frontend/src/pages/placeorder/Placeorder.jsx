@@ -1,36 +1,88 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import './Placeorder.css';
 import { StoreContext } from "../../context/StoreContext";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios'
 const Placeorder = ()=>{
 
-     const {getTotalCartAmount} = useContext(StoreContext);
+     const {getTotalCartAmount,token,food_list, cartItems,url} = useContext(StoreContext);
      const navigate = useNavigate();
+
+    const [data,setData]  =useState({
+        firstName: "",
+        lastName: "",
+        email:"",
+        street:"",
+        city:"",
+        state:"",
+        zipcode:"",
+        country:"",
+        phone:""
+    });
+    useEffect(()=>{
+        console.log(data)
+    },[data])
+
+
+    const onChangeHandler = (event)=>{
+        const name  = event.target.name;
+        const value = event.target.value;
+        setData(data=>({...data,[name]:value}))
+    } 
+
+    const placeOrder = async(event)=>{
+        event.preventDefault();
+        let orderItems= [];
+        food_list.map((item)=>{
+            if(cartItems[item._id]>0)
+            {
+                let itemInfo = item;
+                itemInfo['quantity'] = cartItems[item._id];
+                orderItems.push(itemInfo);
+            }
+        })
+        // console.log(orderItems);
+        let orderData  = {
+            address: data,
+            items: orderItems,
+            amount: getTotalCartAmount()+2
+        }
+        let response  = await axios.post(url+'/api/order/place',orderData,{headers:{token}});
+        if(response.data.success)
+        {
+            const {session_url} = response.data;
+            window.location.replace(session_url);
+        }
+        else{
+           alert('Error') 
+        }
+
+    }
 
     return (
 
-        <form action="" className="place-order">
+        <form  onSubmit={placeOrder} action="" className="place-order">
             <div className="place-order-left">
                 <p className="title">Delivery Information</p>
 
                 <div className="multi-fields">
-                    <input type="text" placeholder="First Name" />
-                    <input type="text" placeholder="Last Name" />
+                    <input required type="text" name="firstName" onChange={onChangeHandler} value={data.firstName} placeholder="First Name" />
+                    <input required type="text" name='lastName' onChange={onChangeHandler} value={data.lastName} placeholder="Last Name" />
                 </div>
 
-                <input type="email" placeholder="Email" />
-                <input type="text" placeholder="Street"/>
-
-                <div className="multi-fields">
-                    <input type="text" placeholder="City" />
-                    <input type="text" placeholder="State" />
-                </div>
+                <input required type="email" name="email" onChange={onChangeHandler} value={data.email} placeholder="Email" />
+                <input required type="text" name="street" onChange={onChangeHandler} value={data.street} placeholder="Street"/>
 
                 <div className="multi-fields">
-                    <input type="text" placeholder="ZipCode" />
-                    <input type="text" placeholder="Country" />
+                    <input required type="text" name="city" onChange={onChangeHandler} value={data.city} placeholder="City" />
+                    <input required type="text" name="state" onChange={onChangeHandler} value={data.state} placeholder="State" />
                 </div>
-                <input type="text" placeholder="Phone Number" />
+
+                <div className="multi-fields">
+                    <input required type="text" name="zipcode" onChange={onChangeHandler} value={data.zipcode} placeholder="ZipCode" />
+                    <input required type="text" name="country" onChange={onChangeHandler} value={data.country} placeholder="Country" />
+                </div>
+                <input required type="text" name="phone" onChange={onChangeHandler} value={data.phone} placeholder="Phone Number" />
 
             </div>
             <div className="place-order-right">
