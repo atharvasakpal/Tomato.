@@ -3,7 +3,7 @@ const User = require('../models/userModel');
 const Stripe = require('stripe');
 
 
-const stripe = new Stripe(process.env.STRIPE_SECRET);
+const stripe = new Stripe("sk_test_51PyFeI2NQ8EPjLSU4TQsizNmgrc1ib4HnDXbmr36rYEJ5veZ2QhfpRtW5FmORU0SKeKbVKuTxBMkQrz31D4ZiMW300UzffBUXl");
 
 // import {loadStripe} fr om '@stripe/stripe-js';
 
@@ -29,11 +29,11 @@ const placeOrder = async(req,res)=>{
 
         const line_items = req.body.items.map((item)=>({
             price_data: {
-                currency:'inr',
+                currency:'usd',
                 product_data: {
                     name:item.name
                 },
-                unit_amount: item.price *100 * 80
+                unit_amount: item.price*100
             },
             quantity: item.quantity
         }))
@@ -41,11 +41,11 @@ const placeOrder = async(req,res)=>{
 
         line_items.push({
             price_data:{
-                currency:'inr',
+                currency:'usd',
                 product_data:{
                     name: 'Delivery Charges'
                 },
-                unit_amount: 2*100*80
+                unit_amount: 2*100
             }
             ,quantity: 1
         })
@@ -61,6 +61,9 @@ const placeOrder = async(req,res)=>{
 
 
         res.json({success:true, session_url:session.url})
+
+        
+
     }
     catch(err)
     {
@@ -68,7 +71,30 @@ const placeOrder = async(req,res)=>{
         res.json({success:false, message: 'ERROR'})
 
     }
+  
+}
+
+const verifyOrder = async(req,res)=>{
+    const {success, orderId} = req.body;
+    try{
+        if(success== 'true')
+        {
+            await Order.findByIdAndUpdate(orderId,{payment:true});
+            res.json({success:true,message:'Paid'});
+        }
+        else
+        {
+            await Order.findByIdAndDelete(orderId);
+            res.json({success:false,message:'Not Paid'});
+        }
+    }
+    catch(err)
+    {
+        console.log(err);
+        res.json({success:false,message:err});
+    }
 }
 
 
-module.exports = {placeOrder};
+
+module.exports = {placeOrder,verifyOrder};
