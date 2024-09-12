@@ -54,6 +54,7 @@ const Placeorder = ()=>{
             window.location.replace(session_url);
         }
         else{
+             
            alert('Error') 
         }
 

@@ -5,6 +5,10 @@ const Stripe = require('stripe');
 
 const stripe = new Stripe(process.env.STRIPE_SECRET);
 
+// import {loadStripe} fr om '@stripe/stripe-js';
+
+// const stripe = await loadStripe(process.env.STRIPE_KEY);
+
 
 //placing user order for the frontend
 const placeOrder = async(req,res)=>{
@@ -53,6 +57,7 @@ const placeOrder = async(req,res)=>{
             success_url : `${frontend_url}/verify?success=true&orderId=${newOrder._id}`,
             cancel_url : `${frontend_url}/verify?success=false&orderId=${newOrder._id}`
         })
+
 
 
         res.json({success:true, session_url:session.url})
