@@ -1,3 +1,4 @@
+
 const Order = require('../models/orderModel');
 const User = require('../models/userModel');
 const Stripe = require('stripe');
@@ -111,6 +112,33 @@ const userOrders = async(req,res)=>{
     }
 } 
 
+const listOrders = async(req,res)=>{
+        try{
+            const orders = await Order.find({});
+            res.json({success:true,data: orders});
+
+        }
+        catch(err)
+        {
+            console.log(err);
+            res.json({success:false, message:err})
+        }
+
+}
 
 
-module.exports = {placeOrder,verifyOrder,userOrders};
+//api for updating order status
+const updateStatus = async(req,res)=>{
+    try{
+        await Order.findByIdAndUpdate(req.body.orderId,{status:req.body.status});
+        res.json({success:true, message: 'Status Updated!'});
+    }
+    catch(err)
+    {
+        console.log(err);
+        res.json({success:false, message: err});
+    }
+}
+
+
+module.exports = {placeOrder,verifyOrder,userOrders,listOrders,updateStatus};

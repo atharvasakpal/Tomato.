@@ -11,7 +11,7 @@ import MyOrders from './pages/myorders/myorders';
 
 const App = ()=>{
 
-  const [showLogin, setShowLogin] = useState(false)
+  const [showLogin, setShowLogin] = useState(false);
 
   return<>
   {showLogin ?<LoginPopup setShowLogin={setShowLogin}/>:<></>}
