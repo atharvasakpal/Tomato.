@@ -14,7 +14,7 @@ const stripe = new Stripe("sk_test_51PyFeI2NQ8EPjLSU4TQsizNmgrc1ib4HnDXbmr36rYEJ
 const placeOrder = async(req,res)=>{
     try{
 
-        const frontend_url = 'https://localhost:3000';
+        const frontend_url = 'http://localhost:3000';
 
         const newOrder = new Order({
             userId: req.body.userId,
@@ -50,13 +50,15 @@ const placeOrder = async(req,res)=>{
             ,quantity: 1
         })
 
-
+       
         const session = await stripe.checkout.sessions.create({
             line_items: line_items,
             mode: 'payment',
             success_url : `${frontend_url}/verify?success=true&orderId=${newOrder._id}`,
             cancel_url : `${frontend_url}/verify?success=false&orderId=${newOrder._id}`
         })
+    
+    
 
 
 
