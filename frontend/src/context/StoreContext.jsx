@@ -12,7 +12,7 @@ const StoreContextProvider = (props)=>{
 
     const [cartItems, setCartItems] = useState({});
 
-    const url = 'http://localhost:4000';
+    const url = process.env.BACKEND_URL;
 
     const [token,setToken] = useState("");
 
