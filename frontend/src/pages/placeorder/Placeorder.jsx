@@ -57,6 +57,19 @@ const Placeorder = ()=>{
 
     }
 
+    
+    useEffect(()=>{
+        if(!token)
+        {
+            navigate('/cart');
+
+        }
+        else if(getTotalCartAmount() === 0)
+        {
+            navigate('/cart');
+        }
+    },[token])
+
     return (
 
         <form  onSubmit={placeOrder} action="" className="place-order">
